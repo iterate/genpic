@@ -2,6 +2,8 @@
 
 ## Install the CLI
 
+This CLI requires Babashka, bbin and Java to be installed.
+
 To install from Github, please run:
 
     bbin install io.github.iterate/genpic --latest-sha
