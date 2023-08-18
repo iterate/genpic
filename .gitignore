@@ -1,8 +1,10 @@
+# General ignores
 .DS_Store
 .idea
 *.log
 tmp/
 
+# Clojure
 /target
 /classes
 /checkouts
@@ -15,3 +17,7 @@ pom.xml.asc
 /.nrepl-port
 /.prepl-port
 /.cpcache
+
+# Our project
+## Clerk
+/.clerk
