@@ -4,17 +4,29 @@
   {:nextjournal.clerk/toc true}
   (:require
    [babashka.http-client :as http]
-   [cheshire.core :as json]))
+   [cheshire.core :as json]
+   [clojure.edn :as edn]
+   [nextjournal.clerk :as clerk]))
+
+(defn read-config []
+  (-> (slurp "config.edn")
+      edn/read-string))
+
+^::clerk/no-cache
+(def config (read-config))
+
+(assert (:openapi-api-key config))
+(assert (:openapi-org config))
 
 ;; ## Tokens and setup
 
 ;; This is Teodor's personal OpenAI key. Some usage for educational purposes is
 ;; fine.
-(def openapi-api-key "sk-TODO")
+(def openapi-api-key (:openapi-api-key config))
 
 (def authorization-header
   {:authorization (str "Bearer " openapi-api-key)
-   "OpenAI-Organization" "org-TODO"})
+   "OpenAI-Organization" (:openapi-org config)})
 
 (defn openapi-get
   ([endpoint extra-headers]
@@ -52,4 +64,4 @@
    :message
    :content))
 
-;; (gpt-ask "Give me a list of tall mountains")
+(gpt-ask "Give me a list of tall mountains")
