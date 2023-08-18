@@ -21,3 +21,6 @@ pom.xml.asc
 # Our project
 /.clerk
 /config.edn
+/.clj-kondo
+/.calva
+/.lsp
