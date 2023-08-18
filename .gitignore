@@ -19,5 +19,5 @@ pom.xml.asc
 /.cpcache
 
 # Our project
-## Clerk
 /.clerk
+/config.edn
