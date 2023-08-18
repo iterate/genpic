@@ -1,4 +1,4 @@
 (ns iterate.genpic)
 
-(defn -main [& args]
+(defn -main [& _args]
   (println "generate pictures!"))

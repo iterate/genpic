@@ -1,1 +1,2 @@
-{:deps {io.github.iterate/genpic {:local/root "."}}}
+{:deps {io.github.iterate/genpic {:local/root "."}}
+ :bbin/bin {genpic {:main-opts ["-m" "iterate.mainpic/-main"]}}}
