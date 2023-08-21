@@ -1,13 +1,10 @@
-;; # Using the OpenAI API
-
-(ns iterate.genpic.explore
+(ns iterate.prompt
   {:nextjournal.clerk/toc true}
   (:require
    [babashka.http-client :as http]
    [cheshire.core :as json]
    [clojure.edn :as edn]
-   [nextjournal.clerk :as clerk]
-   [babashka.cli :as cli]))
+   [nextjournal.clerk :as clerk]))
 
 (defn read-config []
   (-> (slurp "config.edn")
@@ -19,26 +16,17 @@
 (assert (:openapi-api-key config))
 (assert (:openapi-org config))
 
-;; ## Tokens and setup
-
-;; This is Teodor's personal OpenAI key. Some usage for educational purposes is
-;; fine.
 (def openapi-api-key (:openapi-api-key config))
 
 (def authorization-header
   {:authorization (str "Bearer " openapi-api-key)
    "OpenAI-Organization" (:openapi-org config)})
 
-(defn openapi-get
-  ([endpoint extra-headers]
-   (http/get endpoint {:headers (merge authorization-header extra-headers)})))
-
 
 (defn openapi-post
   [endpoint opts]
   (http/post endpoint {:headers (merge authorization-header (:headers opts))
                        :body (:body opts "")}))
-
 (defn resp->json [resp] (json/parse-string (:body resp) keyword))
 (defn first-choice-message [msg]
   (-> msg
@@ -46,8 +34,6 @@
       first
       :message
       :content))
-
-;; ## What models are available?
 
 (defn gpt-ask [q]
   (->>
@@ -58,27 +44,13 @@
                                                :messages
                                                [{"role" "user",
                                                  "content" q}]
-                                               "temperature" 0.7
-                                               })})
+                                               "temperature" 0.7})})
    resp->json
    :choices
    first
    :message
    :content))
-
-(clerk/html [:p 
+(clerk/html [:p
              (gpt-ask "What is the Norwegian company Iterate?")])
 
-(defn branch-create [opts]
-  "branch create")
 
-(defn branch-delete [opts]
-  "Branch delete!!!!")
-
-(defn complete [opts]
-  "Complete!!!")
-
-(cli/dispatch [{:cmds ["branch" "create"] :fn branch-create}
-               {:cmds ["branch" "delete"] :fn branch-delete}
-               {:cmds ["complete"] :fn complete}]
-              ["branch" "create"]) ;; genpic complete
