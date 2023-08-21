@@ -1,6 +1,6 @@
 (ns iterate.genpic 
   (:require [babashka.cli :as cli]
-            [iterate.prompt :as prompt]))
+            [iterate.genpic.prompt2 :as prompt]))
 
 prompt/config
 
@@ -15,7 +15,8 @@ prompt/config
 
 (defn ask [opts]
   (let [prompt (get-in opts [:opts :prompt])]
-    (prompt/gpt-cli-ask prompt))
+    (println (prompt/gpt-ask prompt))
+    )
   )
 
 (defn help [opts]
