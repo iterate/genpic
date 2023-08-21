@@ -6,8 +6,7 @@
    [babashka.http-client :as http]
    [cheshire.core :as json]
    [clojure.edn :as edn]
-   [nextjournal.clerk :as clerk]
-   [babashka.cli :as cli]))
+   [nextjournal.clerk :as clerk]))
 
 (defn read-config []
   (-> (slurp "config.edn")
@@ -68,17 +67,3 @@
 
 (clerk/html [:p 
              (gpt-ask "What is the Norwegian company Iterate?")])
-
-(defn branch-create [opts]
-  "branch create")
-
-(defn branch-delete [opts]
-  "Branch delete!!!!")
-
-(defn complete [opts]
-  "Complete!!!")
-
-(cli/dispatch [{:cmds ["branch" "create"] :fn branch-create}
-               {:cmds ["branch" "delete"] :fn branch-delete}
-               {:cmds ["complete"] :fn complete}]
-              ["branch" "create"]) ;; genpic complete

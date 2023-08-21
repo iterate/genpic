@@ -4,13 +4,13 @@
    [babashka.http-client :as http]
    [cheshire.core :as json]
    [clojure.edn :as edn]
-   [nextjournal.clerk :as clerk]))
+   ))
 
 (defn read-config []
   (-> (slurp "config.edn")
       edn/read-string))
 
-^::clerk/no-cache
+
 (def config (read-config))
 
 (assert (:openapi-api-key config))
@@ -28,12 +28,18 @@
   (http/post endpoint {:headers (merge authorization-header (:headers opts))
                        :body (:body opts "")}))
 (defn resp->json [resp] (json/parse-string (:body resp) keyword))
-(defn first-choice-message [msg]
-  (-> msg
-      :choices
-      first
-      :message
-      :content))
+
+(defn gpt-cli-ask
+  [prompt]
+  (->>
+   (openapi-post "https://api.openai.com/v1/chat/completions"
+                 {:headers {:content-type "application/json"
+                            :authorization (str "Bearer" openapi-api-key)}
+                  :body (json/generate-string {:model "gpt-3.5-turbo"
+                                               :messages
+                                               ["role" "user",
+                                                "content" prompt]
+                                               "temprature" 0.7})})))
 
 (defn gpt-ask [q]
   (->>
@@ -50,7 +56,8 @@
    first
    :message
    :content))
-(clerk/html [:p
-             (gpt-ask "What is the Norwegian company Iterate?")])
+
+(gpt-cli-ask "Give me 10 random countries")
+
 
 
