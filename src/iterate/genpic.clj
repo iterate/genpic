@@ -2,7 +2,6 @@
   (:require [babashka.cli :as cli]
             [iterate.genpic.prompt2 :as prompt]))
 
-prompt/config
 
 (defn branch-create [opts]
   (println "branch create"))
@@ -15,7 +14,7 @@ prompt/config
 
 (defn ask [opts]
   (let [prompt (get-in opts [:opts :prompt])]
-    (println (prompt/gpt-ask prompt))
+    (println (prompt/gpt-ask prompt (System/getenv "GENPIC_OPENAI_API_KEY")))
     )
   )
 

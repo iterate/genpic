@@ -6,31 +6,10 @@
   (:require
    [babashka.http-client :as http]
    [cheshire.core :as json]
-   [clojure.edn :as edn]
    ))
-
-(defn read-config []
-  (-> (slurp "config.edn")
-      edn/read-string))
-
-(def config (read-config))
-
-(assert (:openapi-api-key config))
-(assert (:openapi-org config))
-
-;; ## Tokens and setup
-
-;; This is Teodor's personal OpenAI key. Some usage for educational purposes is
-;; fine.
-(def openapi-api-key (:openapi-api-key config))
-
-(def authorization-header
-  {:authorization (str "Bearer " openapi-api-key)
-   "OpenAI-Organization" (:openapi-org config)})
-
 (defn openapi-post
   [endpoint opts]
-  (http/post endpoint {:headers (merge authorization-header (:headers opts))
+  (http/post endpoint {:headers (:headers opts)
                        :body (:body opts "")}))
 
 (defn resp->json [resp] (json/parse-string (:body resp) keyword))
@@ -38,11 +17,11 @@
 
 ;; ## What models are available?
 
-(defn gpt-ask [q]
+(defn gpt-ask [q api-key]
   (->>
    (openapi-post "https://api.openai.com/v1/chat/completions"
                  {:headers {:content-type "application/json"
-                            :authorization (str "Bearer " openapi-api-key)}
+                            :authorization (str "Bearer " api-key)}
                   :body (json/generate-string {:model "gpt-3.5-turbo"
                                                :messages
                                                [{"role" "user",
@@ -52,8 +31,9 @@
    resp->json
    :choices
    first
-   :message
+   :message 
    :content))
 
-(gpt-ask "What is 4+4")
+
+(gpt-ask "What is 4+4" (System/getenv "GENPIC_OPENAI_API_KEY"))
 
