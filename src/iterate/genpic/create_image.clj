@@ -14,6 +14,12 @@
                                                        :size "1024x1024"})})]
     (:data (json/parse-string (:body resp) true))))
 
-(defn gpt-generate [p api-key]
+(defn openai-key-from-env []
+  (System/getenv "GENPIC_OPENAI_API_KEY"))
+
+(comment
+  (openai-key-from-env)
+  )
+(defn generate [p api-key]
   (->>
    (openapi-post-generate p api-key)))
