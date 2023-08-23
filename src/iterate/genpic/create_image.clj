@@ -1,9 +1,7 @@
 (ns iterate.genpic.create-image
   (:require
    [babashka.http-client :as http]
-   [cheshire.core :as json]
-   [clojure.edn :as edn]
-   [nextjournal.clerk :as clerk]
+   [cheshire.core :as json] 
    [babashka.curl]))
 
 (defn openapi-post-generate
