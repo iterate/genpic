@@ -23,7 +23,7 @@
                  {:headers {:content-type "application/json"
                             :authorization (str "Bearer " api-key)}
                   :body (json/generate-string {:model "gpt-3.5-turbo"
-                                               :messages
+                                               :messages 
                                                [{"role" "user",
                                                  "content" q}]
                                                "temperature" 0.7
@@ -33,7 +33,4 @@
    first
    :message 
    :content))
-
-
-(gpt-ask "What is 4+4" (System/getenv "GENPIC_OPENAI_API_KEY"))
 
