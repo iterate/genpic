@@ -1,6 +1,7 @@
 (ns iterate.genpic 
   (:require [babashka.cli :as cli]
-            [iterate.genpic.prompt2 :as prompt]))
+            [iterate.genpic.prompt2 :as prompt]
+            [iterate.genpic.create-image :as create-image]))
 
 (defn ask [opts]
   (let [prompt (get-in opts [:opts :prompt])]
@@ -9,7 +10,7 @@
   )
 
 (defn generate [opts]
-  (prn opts)
+  (prn (create-image/generate (get-in opts [:opts :prompt]) (create-image/openai-key-from-env) )) 
   )
 
 (defn help [opts]
