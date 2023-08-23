@@ -8,11 +8,16 @@
     )
   )
 
+(defn generate [opts]
+  (prn opts)
+  )
+
 (defn help [opts]
   (println "Nyttig hjelpetekst her ..."))
 
 (def subcommands [
                   {:cmds ["ask"] :fn ask :args->opts [:prompt]}
+                  {:cmds ["generate"] :fn generate :args->opts [:prompt]}
                   {:cmds [] :fn help}])
 
 (defn -main [& args]
