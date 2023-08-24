@@ -6,7 +6,13 @@
 
 (defn openapi-post-generate
   ( [opts api-key n]
-   (println "det er blitt gitt et ønske om å lage et annet enn 2 bilder" n))
+   (let [resp (http/post "https://api.openai.com/v1/images/generations"
+                         {:headers {:content-type "application/json"
+                                    :authorization (str "Bearer " api-key)}
+                          :body (json/generate-string {:prompt opts
+                                                       :n n
+                                                       :size "1024x1024"})})]
+     (:data (json/parse-string (:body resp) true))))
   ( [opts api-key]
    (let [ resp (http/post "https://api.openai.com/v1/images/generations"
                           {:headers {:content-type "application/json"
@@ -24,7 +30,8 @@
   )
 (defn generate 
   ([p api-key n]
-   openapi-post-generate p api-key n)
+   (println (str "Nå har create-image/generate kjørt og den skal kjøres med " n ))
+   ( openapi-post-generate p api-key n)) 
   ([p api-key]
    (->>
     (openapi-post-generate p api-key))))

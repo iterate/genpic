@@ -11,7 +11,10 @@
 
 (defn generate [opts]
   (if (get-in opts [:opts :n]) 
-    (println "Det er sendt inn 3 argumenter" )
+    (let [resp (create-image/generate (get-in opts [:opts :prompt]) (create-image/openai-key-from-env) (get-in opts [:opts :n]) )]
+      (println "\n")
+      (doseq [url resp]
+        (println (str url "\n" "\n"))))
    (let [resp (create-image/generate (get-in opts [:opts :prompt]) (create-image/openai-key-from-env))]
      (println "\n")
      (doseq [url resp]
